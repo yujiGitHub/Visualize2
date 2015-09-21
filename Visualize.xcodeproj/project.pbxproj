@@ -17,8 +17,6 @@
 		BAA492C31B6C478E0016B96F /* createBoxTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAA492C21B6C478E0016B96F /* createBoxTests.swift */; };
 		BAA492CD1B6C4A590016B96F /* ovalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAA492CC1B6C4A590016B96F /* ovalView.swift */; };
 		BAC270751B98750E0033793E /* sky.png in Resources */ = {isa = PBXBuildFile; fileRef = BAC270741B98750E0033793E /* sky.png */; };
-		BAD1A4221B9992A900E46FF3 /* TouchScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAD1A4211B9992A900E46FF3 /* TouchScrollView.swift */; };
-		BAD1A4261B9999AA00E46FF3 /* ScrollViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAD1A4251B9999AA00E46FF3 /* ScrollViewDelegate.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -46,8 +44,6 @@
 		BAA492C21B6C478E0016B96F /* createBoxTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = createBoxTests.swift; sourceTree = "<group>"; };
 		BAA492CC1B6C4A590016B96F /* ovalView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ovalView.swift; sourceTree = "<group>"; };
 		BAC270741B98750E0033793E /* sky.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sky.png; sourceTree = "<group>"; };
-		BAD1A4211B9992A900E46FF3 /* TouchScrollView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TouchScrollView.swift; sourceTree = "<group>"; };
-		BAD1A4251B9999AA00E46FF3 /* ScrollViewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScrollViewDelegate.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -96,8 +92,6 @@
 				BAA492AC1B6C478E0016B96F /* AppDelegate.swift */,
 				BAA492AE1B6C478E0016B96F /* ViewController.swift */,
 				BAA492CC1B6C4A590016B96F /* ovalView.swift */,
-				BAD1A4211B9992A900E46FF3 /* TouchScrollView.swift */,
-				BAD1A4251B9999AA00E46FF3 /* ScrollViewDelegate.swift */,
 				BAA492B01B6C478E0016B96F /* Main.storyboard */,
 				BAA492B31B6C478E0016B96F /* Images.xcassets */,
 				BAA492B51B6C478E0016B96F /* LaunchScreen.xib */,
@@ -234,8 +228,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				BAA492AF1B6C478E0016B96F /* ViewController.swift in Sources */,
-				BAD1A4261B9999AA00E46FF3 /* ScrollViewDelegate.swift in Sources */,
-				BAD1A4221B9992A900E46FF3 /* TouchScrollView.swift in Sources */,
 				BAA492CD1B6C4A590016B96F /* ovalView.swift in Sources */,
 				BAA492AD1B6C478E0016B96F /* AppDelegate.swift in Sources */,
 			);

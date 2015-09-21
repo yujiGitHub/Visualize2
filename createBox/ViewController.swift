@@ -31,6 +31,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
     var backgroundImage: UIImage = UIImage(named: "sky.png")!
     var backgroundImageView: UIImageView = UIImageView()
     var touchedNum: Int = 0
+    var bLongPress: Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -111,22 +112,19 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
     }
     
     @IBAction func tweetButoon() {
-        
         var twitterPostViewController:SLComposeViewController = SLComposeViewController(forServiceType: SLServiceTypeTwitter)
-        
         self.presentViewController(twitterPostViewController, animated: true, completion: nil)
     }
     
     func roadData() {
         NSLog(String(array.count))
-        var tgrArray: [UITapGestureRecognizer]! = []
+        var tapGestureArray: [UITapGestureRecognizer]! = []
+        var panGestureArray: [UIPanGestureRecognizer]! = []
+        var longPressGestureArray: [UILongPressGestureRecognizer]! = []
         
         for var i = 0; i < array.count; i++ {
             
-            NSLog("I NUMBER == %@",i)
-
             //ユーザーデータ取得
-            NSLog("I NUMBER == %@",i)
             var tweet:NSDictionary = array[i] as! NSDictionary
             var userInfo:NSDictionary = tweet["user"] as! NSDictionary
             var tweetText:String = tweet["text"]!.description
@@ -145,8 +143,14 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
             var userImagePathData:NSData = NSData(contentsOfURL: NSURL(string: userInfo["profile_image_url"]!.description)!)!
             var userImage:UIImage = UIImage(data: userImagePathData)!
             
-            tgrArray[i] = UITapGestureRecognizer(target: self, action: "tapped:")
-            tgrArray[i].delegate = self
+            tapGestureArray.append(UITapGestureRecognizer(target: self, action: "tapGesture:"))
+            tapGestureArray[i].delegate = self
+            
+            panGestureArray.append(UIPanGestureRecognizer(target: self, action: "panGesture:"))
+            panGestureArray[i].delegate = self
+            
+            longPressGestureArray.append(UILongPressGestureRecognizer(target: self, action: "longPressGesture:"))
+            longPressGestureArray[i].delegate = self
             
             //お絵描き
             var width: CGFloat = 200
@@ -158,69 +162,79 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
             draw.backgroundColor = UIColor.clearColor()
             draw.tag = i+1
             subView.addSubview(draw)
-            NSLog("I NUMBER == %@",i)
-            draw.addGestureRecognizer(tgrArray[i])
+            draw.addGestureRecognizer(tapGestureArray[i])
+            draw.addGestureRecognizer(panGestureArray[i])
+            draw.addGestureRecognizer(longPressGestureArray[i])
         }
-        subView.backgroundColor = UIColor(patternImage: backgroundImage)
     }
     
-    func tapped(sender: UITapGestureRecognizer){
-        print("tapped\(sender.view!.tag)! ")
+    func tapGesture(sender: UITapGestureRecognizer){
+        
+        touchedNum = sender.view!.tag
+        print("tapped\(touchedNum)! ")
+        mainView.zoomScale = 1.0
+        subView.bringSubviewToFront(sender.view!)
+        
+    }
+    func panGesture(sender: UIPanGestureRecognizer){
+        
+        subView.bringSubviewToFront(sender.view!)
+        
+        // ドラッグで移動した距離を取得する
+        var location = sender.translationInView(subView)
+        // 移動した距離だけ、UIImageViewのcenterポジションを移動させる
+        var movedPoint = CGPoint(x:sender.view!.center.x + location.x, y:sender.view!.center.y + location.y)
+        sender.view!.center = movedPoint;
+        // ドラッグで移動した距離を初期化する
+        // これを行わないと、[sender translationInView:]が返す距離は、ドラッグが始まってからの蓄積値となるため、
+        // 今回のようなドラッグに合わせてImageを動かしたい場合には、蓄積値をゼロにする
+        sender.setTranslation(CGPointZero, inView: subView)
+    }
+    
+    func longPressGesture(sender: UILongPressGestureRecognizer) {
+        bLongPress = true
+        print("longPressed")
     }
     
     func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
-        
+        //更新
     }
     
-    override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
-        
-        for touch: AnyObject in touches {
-            
-            var t: UITouch = touch as! UITouch
-            
-//            NSLog(String(touchedNum))
-            var movingView = subView.viewWithTag(touchedNum)!
-            
-            switch t.view.tag {
-            case 1...array.count:
-                NSLog("Label touched")
-                touchedNum = t.view.tag
-                mainView.zoomScale = 1.0
-                
-            default:
-                break
-            }
-            
-            subView.bringSubviewToFront(t.view)
-        }
-    }
+//    override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
+//        for touch: AnyObject in touches {
+//            var t: UITouch = touch as! UITouch
+////            NSLog(String(touchedNum))
+//            var movingView = subView.viewWithTag(touchedNum)!
+//            switch t.view.tag {
+//            case 1...array.count:
+//                NSLog("Label touched")
+//                touchedNum = t.view.tag
+//                mainView.zoomScale = 1.0
+//            default:
+//                break
+//            }
+//            subView.bringSubviewToFront(t.view)
+//        }
+//    }
     
-    func touched(touches:Set<NSObject>) {
-        
-    }
-
-    func modalChanged(TouchNumber: Int) {
-        println("\(TouchNumber)")
-    }
-    
-    override func touchesMoved(touches: Set<NSObject>, withEvent event: UIEvent) {
-        for touch: AnyObject in touches {
-            
-            NSLog("moving")
-            
-            var t: UITouch = touch as! UITouch
-            
-            switch t.view.tag {
-            case 1...array.count:
-                var currentPoint: CGPoint = t.locationInView(subView)
-                NSLog(String(touchedNum))
-                var movingView: UIView = subView.viewWithTag(touchedNum)!
-                movingView.center = currentPoint
-            default:
-                break
-            }
-        }
-    }
+//    override func touchesMoved(touches: Set<NSObject>, withEvent event: UIEvent) {
+//        for touch: AnyObject in touches {
+//            
+//            NSLog("moving")
+//            
+//            var t: UITouch = touch as! UITouch
+//            
+//            switch t.view.tag {
+//            case 1...array.count:
+//                var currentPoint: CGPoint = t.locationInView(subView)
+//                NSLog(String(touchedNum))
+//                var movingView: UIView = subView.viewWithTag(touchedNum)!
+//                movingView.center = currentPoint
+//            default:
+//                break
+//            }
+//        }
+//    }
     
     func viewForZoomingInScrollView(scrollView: UIScrollView) -> UIView? {
         return subView
