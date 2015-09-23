@@ -28,7 +28,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
     var mainView:UIScrollView = UIScrollView()
     var subView: UIView = UIView()
     var lastTweetID: String = ""
-    var backgroundImage: UIImage = UIImage(named: "sky.png")!
+    var backgroundImage: UIImage = UIImage(named: "background.png")!
     var backgroundImageView: UIImageView = UIImageView()
     var touchedNum: Int = 0
     var bLongPress: Bool = false
@@ -109,6 +109,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
         
         self.twitterTimeline()
         self.roadData()
+        
     }
     
     @IBAction func tweetButoon() {
@@ -170,71 +171,83 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
     
     func tapGesture(sender: UITapGestureRecognizer){
         
+        mainView.scrollEnabled = false
+        
         touchedNum = sender.view!.tag
         print("tapped\(touchedNum)! ")
-        mainView.zoomScale = 1.0
+//        mainView.zoomScale = 1.0
         subView.bringSubviewToFront(sender.view!)
+        mainView.scrollEnabled = true
         
     }
     func panGesture(sender: UIPanGestureRecognizer){
         
-        subView.bringSubviewToFront(sender.view!)
-        
-        // ドラッグで移動した距離を取得する
-        var location = sender.translationInView(subView)
-        // 移動した距離だけ、UIImageViewのcenterポジションを移動させる
-        var movedPoint = CGPoint(x:sender.view!.center.x + location.x, y:sender.view!.center.y + location.y)
-        sender.view!.center = movedPoint;
-        // ドラッグで移動した距離を初期化する
-        // これを行わないと、[sender translationInView:]が返す距離は、ドラッグが始まってからの蓄積値となるため、
-        // 今回のようなドラッグに合わせてImageを動かしたい場合には、蓄積値をゼロにする
-        sender.setTranslation(CGPointZero, inView: subView)
+        if(bLongPress){
+            
+            if(sender.state == UIGestureRecognizerState.Began){
+                mainView.scrollEnabled = false
+                subView.bringSubviewToFront(sender.view!)
+            }
+            
+            // ドラッグで移動した距離を取得する
+            var location = sender.translationInView(subView)
+            // 移動した距離だけ、UIImageViewのcenterポジションを移動させる
+            var movedPoint = CGPoint(x:sender.view!.center.x + location.x, y:sender.view!.center.y + location.y)
+            sender.view!.center = movedPoint;
+            // ドラッグで移動した距離を初期化する
+            // これを行わないと、[sender translationInView:]が返す距離は、ドラッグが始まってからの蓄積値となるため、
+            // 今回のようなドラッグに合わせてImageを動かしたい場合には、蓄積値をゼロにする
+            sender.setTranslation(CGPointZero, inView: subView)
+            
+            
+            if(sender.state == UIGestureRecognizerState.Ended){
+                
+                mainView.scrollEnabled = true
+                bLongPress = false
+                
+                var x = sender.view!.frame.height
+                sender.view!.frame.origin.x += x/5
+                sender.view!.frame.origin.y += x/10
+                sender.view!.frame.size.width *= 4/5
+                sender.view!.frame.size.height *= 4/5
+            }
+        }
     }
     
     func longPressGesture(sender: UILongPressGestureRecognizer) {
-        bLongPress = true
+        
+        if(sender.state == UIGestureRecognizerState.Began){
+            
+            bLongPress = true
+            mainView.scrollEnabled = false
+            
+            var x = sender.view!.frame.height
+            sender.view!.frame.origin.x -= x/4
+            sender.view!.frame.origin.y -= x/8
+            sender.view!.frame.size.width *= 5/4
+            sender.view!.frame.size.height *= 5/4
+        }
+        
         print("longPressed")
+        
+        if(sender.state == UIGestureRecognizerState.Ended){
+            mainView.scrollEnabled = true
+            
+            var x = sender.view!.frame.height
+            sender.view!.frame.origin.x += x/5
+            sender.view!.frame.origin.y += x/10
+            sender.view!.frame.size.width *= 4/5
+            sender.view!.frame.size.height *= 4/5
+        }
     }
     
     func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
         //更新
     }
     
-//    override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
-//        for touch: AnyObject in touches {
-//            var t: UITouch = touch as! UITouch
-////            NSLog(String(touchedNum))
-//            var movingView = subView.viewWithTag(touchedNum)!
-//            switch t.view.tag {
-//            case 1...array.count:
-//                NSLog("Label touched")
-//                touchedNum = t.view.tag
-//                mainView.zoomScale = 1.0
-//            default:
-//                break
-//            }
-//            subView.bringSubviewToFront(t.view)
-//        }
-//    }
-    
-//    override func touchesMoved(touches: Set<NSObject>, withEvent event: UIEvent) {
-//        for touch: AnyObject in touches {
-//            
-//            NSLog("moving")
-//            
-//            var t: UITouch = touch as! UITouch
-//            
-//            switch t.view.tag {
-//            case 1...array.count:
-//                var currentPoint: CGPoint = t.locationInView(subView)
-//                NSLog(String(touchedNum))
-//                var movingView: UIView = subView.viewWithTag(touchedNum)!
-//                movingView.center = currentPoint
-//            default:
-//                break
-//            }
-//        }
-//    }
+    func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWithGestureRecognizer otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return true
+    }
     
     func viewForZoomingInScrollView(scrollView: UIScrollView) -> UIView? {
         return subView

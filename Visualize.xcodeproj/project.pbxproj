@@ -16,6 +16,7 @@
 		BAA492B71B6C478E0016B96F /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = BAA492B51B6C478E0016B96F /* LaunchScreen.xib */; };
 		BAA492C31B6C478E0016B96F /* createBoxTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAA492C21B6C478E0016B96F /* createBoxTests.swift */; };
 		BAA492CD1B6C4A590016B96F /* ovalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAA492CC1B6C4A590016B96F /* ovalView.swift */; };
+		BAA68D511BB2B3FD00B04DDB /* background.png in Resources */ = {isa = PBXBuildFile; fileRef = BAA68D501BB2B3FD00B04DDB /* background.png */; };
 		BAC270751B98750E0033793E /* sky.png in Resources */ = {isa = PBXBuildFile; fileRef = BAC270741B98750E0033793E /* sky.png */; };
 /* End PBXBuildFile section */
 
@@ -43,6 +44,7 @@
 		BAA492C11B6C478E0016B96F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		BAA492C21B6C478E0016B96F /* createBoxTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = createBoxTests.swift; sourceTree = "<group>"; };
 		BAA492CC1B6C4A590016B96F /* ovalView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ovalView.swift; sourceTree = "<group>"; };
+		BAA68D501BB2B3FD00B04DDB /* background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = background.png; sourceTree = "<group>"; };
 		BAC270741B98750E0033793E /* sky.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sky.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -95,6 +97,7 @@
 				BAA492B01B6C478E0016B96F /* Main.storyboard */,
 				BAA492B31B6C478E0016B96F /* Images.xcassets */,
 				BAA492B51B6C478E0016B96F /* LaunchScreen.xib */,
+				BAA68D501BB2B3FD00B04DDB /* background.png */,
 				BAC270741B98750E0033793E /* sky.png */,
 				BAA492AA1B6C478E0016B96F /* Supporting Files */,
 			);
@@ -207,6 +210,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				BAA492B21B6C478E0016B96F /* Main.storyboard in Resources */,
+				BAA68D511BB2B3FD00B04DDB /* background.png in Resources */,
 				BAC270751B98750E0033793E /* sky.png in Resources */,
 				BAA492B71B6C478E0016B96F /* LaunchScreen.xib in Resources */,
 				BAA492B41B6C478E0016B96F /* Images.xcassets in Resources */,
