@@ -37,36 +37,30 @@ class ovalView: UIView {
         oval.lineWidth = 2
         oval.stroke()
         
-        var availableRect: CGRect = CGRectMake(rect.width/6, rect.height/6, rect.width*4/6, rect.height*4/6)
-        backView.frame = availableRect
-//        backView.backgroundColor = UIColor.blackColor()
-//        backView.alpha = 1.0
-        self.addSubview(backView)
+        let availableRect: CGRect = CGRectMake(rect.width/6, rect.height/6, rect.width*4/6, rect.height*4/6)
+//        backView.frame = availableRect
+//        self.addSubview(backView)
         
         userImageView.frame = CGRectMake(availableRect.origin.x, availableRect.origin.y, availableRect.width/6, availableRect.width/6)
-//        userImageView.backgroundColor = UIColor.redColor()
-//        userImageView.alpha = 0.5
+        userImageView.tag = 1
         self.addSubview(userImageView)
         
         userNameLabel.frame = CGRectMake(availableRect.origin.x + availableRect.width/6, availableRect.origin.y, availableRect.width*5/6, availableRect.width/6/1.5)
-//        userNameLabel.backgroundColor = UIColor.blueColor()
-//        userNameLabel.alpha = 0.5
-        userNameLabel.font = UIFont.systemFontOfSize(CGFloat(12.0))
+        userNameLabel.font = UIFont.systemFontOfSize(CGFloat(12.0/200*availableRect.width*6/4))
+        userNameLabel.tag = 2
         self.addSubview(userNameLabel)
         
         userIDLabel.frame = CGRectMake(availableRect.origin.x + availableRect.width/6, availableRect.origin.y + availableRect.width/6/1.5, availableRect.width*5/6, availableRect.width/6/3)
-//        userIDLabel.backgroundColor = UIColor.orangeColor()
-//        userIDLabel.alpha = 0.5
-        userIDLabel.font = UIFont.systemFontOfSize(CGFloat(8.0))
+        userIDLabel.font = UIFont.systemFontOfSize(CGFloat(8.0/200*availableRect.width*6/4))
+        userIDLabel.tag = 3
         self.addSubview(userIDLabel)
         
         tweetTextView.frame = CGRectMake(availableRect.origin.x, availableRect.origin.y + availableRect.width/6, availableRect.width, availableRect.height - availableRect.width/6)
         tweetTextView.backgroundColor = UIColor.clearColor()
-//        tweetTextView.alpha = 1.0
-        tweetTextView.font = UIFont.systemFontOfSize(CGFloat(9))
+        tweetTextView.font = UIFont.systemFontOfSize(CGFloat(9.0/200*availableRect.width*6/4))
         tweetTextView.editable = false
+        tweetTextView.tag = 4
         self.addSubview(tweetTextView)
-        
     }
     
 }

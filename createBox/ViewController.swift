@@ -10,18 +10,6 @@ import UIKit
 import Social
 import Accounts
 
-//extension UIScrollView {
-//    public override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
-//        self.nextResponder()?.touchesBegan(touches as Set<NSObject>, withEvent: event)
-//    }
-//    public override func touchesMoved(touches: Set<NSObject>, withEvent event: UIEvent) {
-//        self.nextResponder()?.touchesMoved(touches as Set<NSObject>, withEvent: event)
-//    }
-//    public override func touchesEnded(touches: Set<NSObject>, withEvent event: UIEvent) {
-//        self.nextResponder()?.touchesEnded(touches as Set<NSObject>, withEvent: event)
-//    }
-//}
-
 class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognizerDelegate {
     
     var array:NSArray = NSArray()
@@ -131,6 +119,11 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
             var tweetText:String = tweet["text"]!.description
             var userName:String = userInfo["name"]!.description
             var userID:String = userInfo["screen_name"]!.description
+            userID.insert("@", atIndex: userID.startIndex)
+            var favorite_count:Int = tweet["favorite_count"] as! Int
+            var retweet_count:Int = tweet["retweet_count"] as! Int
+            var action_count:Int = favorite_count + retweet_count
+            print("\(action_count)\n")
             
             if(i == array.count-1){
                 lastTweetID = tweet["id"]!.stringValue
@@ -155,6 +148,9 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
             
             //お絵描き
             var width: CGFloat = 200
+            var plus = action_count * 10
+            if(action_count > 10){plus=100}
+            width += CGFloat(plus)
             var draw = ovalView(frame: CGRectMake(CGFloat(arc4random_uniform(UInt32(subView.frame.width-width))), CGFloat(arc4random_uniform(UInt32(subView.frame.height-(width/2)))), width, width/2))
             draw.userNameLabel.text = userName
             draw.userIDLabel.text = userID
@@ -199,17 +195,10 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
             // 今回のようなドラッグに合わせてImageを動かしたい場合には、蓄積値をゼロにする
             sender.setTranslation(CGPointZero, inView: subView)
             
-            
             if(sender.state == UIGestureRecognizerState.Ended){
                 
                 mainView.scrollEnabled = true
                 bLongPress = false
-                
-                var x = sender.view!.frame.height
-                sender.view!.frame.origin.x += x/5
-                sender.view!.frame.origin.y += x/10
-                sender.view!.frame.size.width *= 4/5
-                sender.view!.frame.size.height *= 4/5
             }
         }
     }
@@ -220,12 +209,15 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
             
             bLongPress = true
             mainView.scrollEnabled = false
+            subView.bringSubviewToFront(sender.view!)
             
-            var x = sender.view!.frame.height
+            var x = sender.view!.frame.size.height
             sender.view!.frame.origin.x -= x/4
             sender.view!.frame.origin.y -= x/8
             sender.view!.frame.size.width *= 5/4
             sender.view!.frame.size.height *= 5/4
+            
+            self.changeView(sender)
         }
         
         print("longPressed")
@@ -238,7 +230,30 @@ class ViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognize
             sender.view!.frame.origin.y += x/10
             sender.view!.frame.size.width *= 4/5
             sender.view!.frame.size.height *= 4/5
+            
+            self.changeView(sender)
         }
+    }
+    
+    func changeView(sender: UILongPressGestureRecognizer) {
+        var userImageView = sender.view!.viewWithTag(1) as! UIImageView
+        var userNameLabel = sender.view!.viewWithTag(2) as! UILabel
+        var userIDLabel = sender.view!.viewWithTag(3) as! UILabel
+        var tweetTextView = sender.view!.viewWithTag(4) as! UITextView
+        
+        let rect = sender.view!.frame
+        let availableRect = CGRectMake(rect.width/6, rect.height/6, rect.width*4/6, rect.height*4/6)
+        
+        userImageView.frame = CGRectMake(availableRect.origin.x, availableRect.origin.y, availableRect.width/6, availableRect.width/6)
+        
+        userNameLabel.frame = CGRectMake(availableRect.origin.x + availableRect.width/6, availableRect.origin.y, availableRect.width*5/6, availableRect.width/6/1.5)
+        userNameLabel.font = UIFont.systemFontOfSize(CGFloat(12.0/200*availableRect.width*6/4))
+        
+        userIDLabel.frame = CGRectMake(availableRect.origin.x + availableRect.width/6, availableRect.origin.y + availableRect.width/6/1.5, availableRect.width*5/6, availableRect.width/6/3)
+        userIDLabel.font = UIFont.systemFontOfSize(CGFloat(8.0/200*availableRect.width*6/4))
+        
+        tweetTextView.frame = CGRectMake(availableRect.origin.x, availableRect.origin.y + availableRect.width/6, availableRect.width, availableRect.height - availableRect.width/6)
+        tweetTextView.font = UIFont.systemFontOfSize(CGFloat(9.0/200*availableRect.width*6/4))
     }
     
     func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
